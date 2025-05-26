@@ -12,7 +12,7 @@ const BOB_AMP = 0.08
 var t_bob = 0.0
 
 #fov variables
-const BASE_FOV = 75.0
+const BASE_FOV = 85.0
 const FOV_CHANGE = 1.5
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -20,6 +20,8 @@ var gravity = 9.8
 
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
+var bullet=load("res://Scripts/bullet.gd")
+@onready var pos = $Head/Camera3D/Gun/pos
 
 
 func _ready():
@@ -39,7 +41,7 @@ func _physics_process(delta):
 		velocity.y -= gravity * delta
 
 	# Handle Jump.
-	if Input.is_action_just_pressed("ui_jump") and is_on_floor():
+	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 	
 	# Handle Sprint.
@@ -49,7 +51,7 @@ func _physics_process(delta):
 		speed = WALK_SPEED
 
 	# Get the input direction and handle the movement/deceleration.
-	var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	var input_dir = Input.get_vector("left", "right", "up", "down")
 	var direction = (head.transform.basis * transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if is_on_floor():
 		if direction:
@@ -72,6 +74,13 @@ func _physics_process(delta):
 	camera.fov = lerp(camera.fov, target_fov, delta * 8.0)
 	
 	move_and_slide()
+	
+	# GUN 
+	if Input.is_action_just_pressed("shoot"):
+		var instance = bullet.instantiate()
+		instance.position = pos.global_positons
+		instance.transform.basis = pos.global_transform.basis
+		get_parent().add_child(instance)
 
 
 func _headbob(time) -> Vector3:
