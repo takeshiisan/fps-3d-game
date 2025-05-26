@@ -20,8 +20,8 @@ var gravity = 9.8
 
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
-var bullet=load("res://Scripts/bullet.gd")
-@onready var pos = $Head/Camera3D/Gun/pos
+var bullet=load("res://Scenes/bullet.tscn")
+@onready var bulletpos = $Head/Camera3D/Gun/pos
 
 
 func _ready():
@@ -78,8 +78,8 @@ func _physics_process(delta):
 	# GUN 
 	if Input.is_action_just_pressed("shoot"):
 		var instance = bullet.instantiate()
-		instance.position = pos.global_positons
-		instance.transform.basis = pos.global_transform.basis
+		instance.position = bulletpos.global_position
+		instance.transform.basis = bulletpos.global_transform.basis
 		get_parent().add_child(instance)
 
 
