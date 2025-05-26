@@ -3,6 +3,7 @@ extends CharacterBody3D
 var speed
 const WALK_SPEED = 5.0
 const SPRINT_SPEED = 8.0
+const SLOW_WALK = 2.0
 const JUMP_VELOCITY = 4.8
 const SENSITIVITY = 0.004
 
@@ -49,6 +50,8 @@ func _physics_process(delta):
 		speed = SPRINT_SPEED
 	else:
 		speed = WALK_SPEED
+		# Handle Walk.
+
 
 	# Get the input direction and handle the movement/deceleration.
 	var input_dir = Input.get_vector("left", "right", "up", "down")
